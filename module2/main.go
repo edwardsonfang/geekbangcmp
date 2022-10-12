@@ -34,7 +34,7 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("VERSION", version)
 
 	//set response statuscode
-	w.WriteHeader(233)
+	w.WriteHeader(200)
 
 	//se response content
 	io.WriteString(w, "ok")
