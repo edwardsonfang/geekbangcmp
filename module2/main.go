@@ -17,8 +17,14 @@ func main() {
 }
 
 func healthz(w http.ResponseWriter, r *http.Request) {
+	for k, v := range r.Header {
+		fmt.Println(k, v)
+		for _, headerv := range v {
+			w.Header().Add(k, headerv)
+		}
+	}
+	//w.Header().Set()
 	w.WriteHeader(233)
-	fmt.Println(r.Header)
 	//for k := range r.Header {
 	//	w.Header().Set(k, "value of this key")
 	//}
