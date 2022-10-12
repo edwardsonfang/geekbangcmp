@@ -34,8 +34,15 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("VERSION", version)
 
 	//set response statuscode
-	w.WriteHeader(200)
+	statusCode := 200
+	w.WriteHeader(statusCode)
 
-	//se response content
+	//set response content
 	io.WriteString(w, "ok")
+
+	//log remote IP, statusCode and print
+	remoteIP := r.RemoteAddr
+	fmt.Printf("remote IP is: %s\n", remoteIP)
+	fmt.Printf("status Code is: %d\n", statusCode)
+	log.Println(remoteIP, statusCode)
 }
