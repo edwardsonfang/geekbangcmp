@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 )
 
 func main() {
@@ -17,17 +18,24 @@ func main() {
 }
 
 func healthz(w http.ResponseWriter, r *http.Request) {
+	//get request header and put them into response header
 	for k, v := range r.Header {
-		fmt.Println(k, v)
+		//fmt.Println(k, v)
 		for _, headerv := range v {
 			w.Header().Add(k, headerv)
 		}
 	}
-	//w.Header().Set()
+	//get os version and put it into response header
+	version := os.Getenv("VERSION")
+	fmt.Printf("VERSION = %s\n", version)
+	if version == "" {
+		version = "Not Available!"
+	}
+	w.Header().Add("VERSION", version)
+
+	//set response statuscode
 	w.WriteHeader(233)
-	//for k := range r.Header {
-	//	w.Header().Set(k, "value of this key")
-	//}
-	// w.Header().Set("reqheader", string(r.Header))
+
+	//se response content
 	io.WriteString(w, "ok")
 }
