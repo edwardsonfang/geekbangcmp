@@ -1,9 +1,20 @@
-package module2
+package main
 
-import "net/http"
+import (
+	"io"
+	"log"
+	"net/http"
+)
 
 func main() {
 	http.HandleFunc("/healthz", healthz)
 
-	err := http.ListenAndServe()
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func healthz(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "ok")
 }
