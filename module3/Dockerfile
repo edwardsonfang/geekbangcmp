@@ -27,4 +27,4 @@ WORKDIR /tiger-httpserver/
 EXPOSE 80
 
 # start my httpserver
-CMD ["./tigerhttpserver"]
+CMD ["./tiger-httpserver/tigerhttpserver"]
