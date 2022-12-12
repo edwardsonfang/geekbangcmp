@@ -1,13 +1,30 @@
-FROM ubuntu
+# basic image
+FROM golang:1.19 AS builder
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN sed -i's/^exit 101/exit0/' /usr/sbin/policy-rc.d
+# maintainer
+MAITAINER tigerfang
 
-RUN \
- apt-get update && \
- apt-get install -y ca-certificates && \
- apt-get install -y curl && \
- rm -rf /var/lib/apt/lists/*
+# configure go env
+RUN go env -w GO111MODULE=on
+RUN go env -w GOPROXY=https://goproxy.cn,direct
 
-ADD ./bin/myapp myapp
-ENTRYPOINT ["/myapp"]
+# set workdir
+WORKDIR /tiger-httpserver
+
+# copy code to workdir
+COPY ./go.main /tiger-httpserver/
+
+# comply code to bin
+RUN go build -v -o tigerhttpserver ./main.go
+
+# build image
+FROM alpine
+
+# set work dir
+WORKDIR /tiger-httpserver/
+
+# expose port
+EXPOSE 80
+
+# start my httpserver
+CMD ["./tigerhttpserver"]
