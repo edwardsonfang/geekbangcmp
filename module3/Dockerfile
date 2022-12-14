@@ -12,19 +12,13 @@ RUN go env -w GOPROXY=https://goproxy.cn,direct
 WORKDIR /tiger-httpserver
 
 # copy code to workdir
-COPY ./main.go /tiger-httpserver/
+COPY *.go /tiger-httpserver/
 
 # comply code to bin
 RUN go build -v -o tigerhttpserver ./main.go
-
-# build image
-FROM alpine
-
-# set work dir
-WORKDIR /tiger-httpserver/
 
 # expose port
 EXPOSE 80
 
 # start my httpserver
-CMD ["tigerhttpserver"]
+CMD ["/tiger-httpserver/tigerhttpserver"]
