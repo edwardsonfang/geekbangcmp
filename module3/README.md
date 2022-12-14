@@ -1,7 +1,43 @@
 # 云原生训练营6期作业Module3
 ## 第一部分 功能介绍
->本次作业主要包含两个文件：main.go和Dockerfile
-## 第二部分 构建镜像
+>本次作业主要包含两个文件：
+* main.go
+* Dockerfile
+>上述两个文件中main.go是module2中的作业，实现了一个简单httpserver；Dockerfile文件是本次作业的主体，是将简单httpserver打包成了一个docker镜像
+## 第二部分 Dockerfile详情
+### 内容简介
+dockerfile中完成了如下动作：
+1. 使用golang基础镜像，版本为1.19，与开发环境保持一致
+2. 设置go环境变量GO111MODULE=on，GOPROXY=https://goproxy.cn,direct
+3. 应用目录为/tiger-httpserver
+4. 应用名称为tigerhttpserver
+5. 应用端口80
+### dockerfile
+    # basic image
+    FROM golang:1.19 AS builder
+    
+    # maintainer
+    MAINTAINER tigerfang
+    
+    # configure go env
+    RUN go env -w GO111MODULE=on
+    RUN go env -w GOPROXY=https://goproxy.cn,direct
+    
+    # set workdir
+    WORKDIR /tiger-httpserver
+    
+    # copy code to workdir
+    COPY *.go /tiger-httpserver/
+    
+    # comply code to bin
+    RUN go build -v -o tigerhttpserver ./main.go
+    
+    # expose port
+    EXPOSE 80
+    
+    # start my httpserver
+    CMD ["/tiger-httpserver/tigerhttpserver"]
+### 构建过程
     root@cncamp:~/geekbangcmp/module3# docker build -f ./Dockerfile -t tigerhttpserver:v0.1 .
     Sending build context to Docker daemon  6.656kB
     Step 1/9 : FROM golang:1.19 AS builder
